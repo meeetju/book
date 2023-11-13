@@ -217,6 +217,14 @@ Untracked files are the files that are not staged/commited to any branch. They f
 
         git log --oneline
 
+- git log only commits sha
+
+        git log --format=format:%H
+
+- Read a commit details with diffs
+
+        git show <commit_sha>
+
 ### Git branch
 
 [git branch docs](https://git-scm.com/docs/git-branch)
@@ -333,6 +341,14 @@ When merge conflicts are solved, remember about committing the changes. Then we 
 
 Every `git pull` is actually also a `merge` which may consist of conflicting parts of code.
 
+### Git cherry-pick
+
+[Git cherry-pick docs](https://git-scm.com/docs/git-cherry-pick)
+
+Git `cherry-pick` is a powerful command that enables arbitrary Git commits to be picked by reference and appended to the current working HEAD. Cherry picking is the act of picking a commit from a branch and applying it to another. git `cherry-pick` can be useful for undoing changes. For example, say a commit is accidently made to the wrong branch. You can switch to the correct branch and `cherry-pick` the commit to where it should belong.
+
+    git cherry-pich <commit_sha>
+
 ### Git diff
 
 [git diff docs](https://git-scm.com/docs/git-diff)
@@ -393,11 +409,23 @@ Every `git pull` is actually also a `merge` which may consist of conflicting par
 
     > Note that `git stash` is a shortcut for `git stash save`
 
+    - To stash with a label that describes the stash
+
+        ```
+        git stash save <LABEL>
+        ```
+        
 - Apply changes from last stash to working copy (removing from stash)
 
         git stash pop
     
     > Note this removes the most recently stashed change form stash
+
+    - To apply stash based on the label
+
+        ```
+        git stash apply stash^{/<LABEL>}
+        ```
 
 - Apply changes from last stash to working copy
 
@@ -418,6 +446,7 @@ Every `git pull` is actually also a `merge` which may consist of conflicting par
 - Drop all stashes
 
         git stash clear
+
 
 ### Go to commit (jump back in time)
 
@@ -472,6 +501,14 @@ Usually, HEAD points to a specific branch reference rather than a particular com
 To not include the file in the commit we can unstage the file from staging area
 
     git restore --staged <file>
+
+To unstage the whole directory
+
+    git reset <dir>
+
+or:
+
+    git restore --staged <dir>
 
 ### Undoing commits
 
@@ -569,7 +606,11 @@ We can configure including submodules by default with:
 
 - If the repo was cloned without the `--recurse-submodules` flag
 
-        git submodule update --initg
+        git submodule update --init
+
+- Update submdules and initialize if necessary
+
+    git sudmodule update --init --recursive
 
 ### Git fetch
 
@@ -851,6 +892,10 @@ Tags are pointers that refer to particular points in Git history. Tags are most 
 
         git tag
 
+- Display the current tag
+
+        git describe --tags
+
 - View the tags that match a pattern
 
         git tag -l "<pattern>"
@@ -860,6 +905,12 @@ Tags are pointers that refer to particular points in Git history. Tags are most 
 - Checkout tag (checkout to the tagged commit, detached state)
 
         git checkout <tag>
+
+- Checkout tag to new branch
+
+        git checkout [tags/]<tag> -b <branch>
+
+    > Note, `tags/` is optional
 
 - Diff bewteen tags
 
