@@ -540,7 +540,7 @@ While `git reset` actually moves the branch pointer backwards eliminating commit
 
 Cleans the working tree by recursively removing files that are not under version control, starting from the current directory.
 
-    git clean
+    git clean -f
 
 ### Pushing change
 

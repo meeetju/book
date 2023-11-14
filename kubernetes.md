@@ -266,11 +266,11 @@ Another job is to create mutliple `Pods` to share the load accross them.
 
 - Delete replica set and all underlying Pods
 
-        kubeclt delete replicaset <name_of_replicaset>
+         delete replicaset <name_of_replicaset>
 
 - Display more info on replicaset
 
-        kubeclt describe replicaset <name_of_replicaset>
+        kubectl describe replicaset <name_of_replicaset>
 
 - Edit the replica set
         
@@ -380,3 +380,156 @@ Kubernetes expects us to configure the internal addresses. We need to follow the
 - All nodes can communicate with all containers and vice-versa without `NAT`.
 
 There are many ready solutions to do that.
+
+## Services
+
+[Kubernetes Service docs](https://kubernetes.io/docs/concepts/services-networking/service/)
+
+Kubernetes services enable communication between various components within and outside of the application.
+
+Services enable loose coupling between micro services in our application.
+
+### Node Port Service
+
+Makes an internal port accessible on a port on the node.
+
+For example we have a pod having an application running on it.
+As an external user to access the webpage. The node has an IP 
+address in the same network as the workstation. The Pod as an IP
+address in the different network which is inside the Node.
+In order to have ability to access the webpage we need to use the
+Kubernetes service, as one of it use cases is to listen to a port
+on the node and forward requests on that port to a port on the Pod running the web application.
+
+> Valid Node ports have to be between 30000 - 32767.
+
+- definition example
+
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: myapp-service
+        spec:
+          type: NodePort
+          ports:
+            - targetPort: 80   # Port of the application in Pod, if not provided it defaults to the same value as `port`
+              port: 80         # Port of the Service object here NodePort
+              nodePort: 30080  # The port of the node
+          selector:            # Labels identify the Pod to which the service port maps to
+            app: myapp
+            type: frontend
+
+
+- Create service using a file
+
+        kubectl create -f <service_file_yaml>
+
+- List services
+
+        kubectl get services
+
+or
+
+        kubectl get svc
+
+> Note we can use combinations like `kubectl get pods,svc`
+
+- Display more data about the service
+
+        kubectl describe service <service_name>
+
+> It will also list the cluster IP and the mapped ports.
+
+- If we use the minikube, in order to show the url (http://node_ip:port)to our app
+
+        minikube service <nodeport_service_name> --url
+
+> Note in our case the `nodeport_service_name` would be `myapp-service`
+
+### Cluster IP Service
+
+Creates a virtual IP inside the cluster to enable communication
+between different services. Like different groups of Pods with frontend, backend and redis. They all have to communicate to eachother.
+Every Pod has an IP address asigned, but this IPs are not static.
+This is becuase some Pods may go down, and new may be created.
+So the Cluster IP service creates a single entrypoint for each group. So if one of frontend Pods wants to communicate with the backend, the Cluser IP service picks one of the backend Pods randomly. This enables to us to easily deploy a microservices based application on Kubernetes cluster.
+
+- definition example
+
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: backend
+        spec:
+          type: ClusterIP      # Note this is a default type of service
+          ports:
+            - targetPort: 80   # Port where backend is exposed
+              port: 80         # Port of the where service is exposed
+          selector:            # Labels identify the set of Pods
+            app: myapp
+            type: backend
+
+- Create service using a file
+
+        kubectl create -f <service_file_yaml>
+
+### Load Balancer Service
+
+Provisions a load balancer for our application in supported cloud providers.
+
+Lets say we have a cluster containing many nodes that have Pods running a fronend application. The Node Port Service makes them accessible from the outside. Every Node has an IP address and and a port that is exposed on the outside. This would mean that the user may access the application on many different IP addresses with the same port. But we want the user to access the application with one readable URL. This may be achieved by the Load Balancer Service.
+
+## Example
+
+A voting application.
+
+Task:
+- deploy containers (in Kubernetes they have to be in Pods)
+- enable connectivity
+- enable external access
+
+### Containers
+
+5 containers so 4 Pods
+4 services (see details below)
+
+voting-app -> redis <-worker-> db <- result-app
+
+#### voting-app (writes to redis)
+- listens on port 80
+- requires a NodePort `voting-app` service so that it is accesible from outside
+#### redis
+- listens on port 6379
+- requires a ClusterIP service named `redis` so that other Pods may communicate
+#### worker (reads from redis, writes to db)
+- it is just a process that does not require a service
+- nothing connects to it
+#### postgres db
+- listens on port 5432
+- requires a ClusterIP service named `db` so that other Pods may communicate
+- requires `username` and `password`
+#### result-app
+- listens on port 80
+- requires a NodePort `result-app` service so that it is accesible from outside
+
+## Tools to setup cluster 
+
+Locally:
+- Minikube
+- MicroK8s
+- Kubeadm
+
+Hosted:
+- Google Cloud Platform
+- Amazon Web Services
+- Microsoft Azure
+
+### Minikube
+
+[Minikube docs](https://minikube.sigs.k8s.io/docs/start/)
+
+[Kubectl installation](https://kubernetes.io/docs/tasks/tools/)
+
+[Minikube installation](https://minikube.sigs.k8s.io/docs/start/)
+
+[Minikube tutorial](https://kubernetes.io/docs/tutorials/hello-minikube/)
