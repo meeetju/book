@@ -79,6 +79,22 @@ We can also link another config file from other files
 . "$HOME/.cargo/env"
 ```
 
+## Users
+
+### Give Sudo privileges to a User
+
+- Execute
+
+        sudo visudo
+
+- Modify the file at the bottom
+
+        <user> ALL=(ALL) ALL
+
+    Or depending on how the `root` is defined
+
+        <user> ALL=(ALL:ALL) ALL
+
 ## Navigation
 
 ---
@@ -981,3 +997,37 @@ To remove package with all config files
 ```console
 apt-get purge [package_name]
 ```
+
+## Instalation guidelines
+
+### VSCode
+
+[Docs](https://code.visualstudio.com/docs/setup/linux)
+
+> Note: Use the terminal approach so that the `code` is added automatically to path
+
+## Linux alongside Windows
+
+- Installation
+
+    [Istallation guidelines](https://www.fosslinux.com/50836/install-linux-mint-alongside-windows.htm)
+
+- Make Windows default on ubuntu boot GRUB
+
+        sudo grep menuentry /boot/grub/grub.cf
+
+    Save the: 
+    
+        `Windows Boot Manager (on /dev/nvme0n1p1)`
+
+- Edit the GROB config
+
+        sudo nano -B /etc/default/grub
+
+    And set the line:
+
+        GRUB_DEFAULT="Windows Boot Manager (on /dev/nvme0n1p1)"
+
+- Apply changes
+
+        sudo update-grub
