@@ -12,6 +12,10 @@ Orchestrator is responsible to control scaling the application(Adding more docke
 
 The kube command line tool `kubectl` (kube control). It is used to deploy and manage applications on a Kubernetes cluster.
 
+- Delete everything on Kubernetes 
+
+        kubectl delete all --all
+
 ## Yaml
 
 - To create a Pod based on the `.yml` use:
@@ -203,7 +207,7 @@ Another job is to create mutliple `Pods` to share the load accross them.
             spec:
               containers:
                 - name: nginx-container
-                 image: nginx
+                  image: nginx
 
 - Run the replication controller
 
@@ -237,7 +241,7 @@ Another job is to create mutliple `Pods` to share the load accross them.
             spec:
               containers:
                 - name: nginx-container
-                 image: nginx
+                  image: nginx
           selector:           # what Pods fall under it, not only from template
             matchLabels:
               type: front-end    
@@ -289,26 +293,34 @@ We want also that the changes may be rolled back. Etc.
 [Kubernetes deployments docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 
 - definition
-
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: myapp-deployment
-        spec:                
-          replicas: 3        
-          template:          
-            metadata:
-              name: myapp-pod
-              labels:
-                app: myapp
-                type: front-end
-            spec:
-              containers:
-                - name: nginx-container
-                 image: nginx
-          selector:           
-            matchLabels:
-              type: front-end    
+  
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voting-app-deploy
+  labels:
+    name: voting-app-deploy
+    app: demo-voting-app
+spec: 
+  replicas: 1
+  selector: # Here come same labels as the labels of Pod 
+    matchLabels:
+      name: voting-app-pod
+      app: demo-voting-app
+  template: # Here comes everything from Pod definition (except for apiVersion and kind)
+    metadata:
+      name: voting-app-pod
+      labels:
+        name: voting-app-pod
+        app: demo-voting-app
+    spec:
+      containers:
+        - name: voting-app
+          image: kodekloud/examplevotingapp_vote:v1
+          ports:
+            - containerPort: 80
+```
 
 - Create deployment with file
 
@@ -512,6 +524,11 @@ voting-app -> redis <-worker-> db <- result-app
 - listens on port 80
 - requires a NodePort `result-app` service so that it is accesible from outside
 
+### Project
+
+- See files with Pods configuration [here](resources/kubernetes/voting_app_pods/)
+- See files with Deployments configuration [here](resources/kubernetes/voting_app_deployments/)
+
 ## Tools to setup cluster 
 
 Locally:
@@ -533,3 +550,8 @@ Hosted:
 [Minikube installation](https://minikube.sigs.k8s.io/docs/start/)
 
 [Minikube tutorial](https://kubernetes.io/docs/tutorials/hello-minikube/)
+
+### Kubernetes on cloud
+
+[Google Cloud](https://cloud.google.com/free/)
+[Kubernetes on Google Cloud](https://cloud.google.com/kubernetes-engine/docs/)

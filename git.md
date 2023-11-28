@@ -766,11 +766,14 @@ Note that steps below depend on the system used.
 
     ssh-keygen -t ed25519 -C "your_email@example.com"
 
+> Check if the file was created in the `.ssh` directory
+> If prompted for providing the file name use downstream `<name>.pub` instead of default `id_ed25519.pub`
+
 [Adding SSH key to github account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
 
     clip < ~/.ssh/id_ed25519.pub
 
-    > Then add the copied SSH key to the `github`
+> Then add the copied SSH key to the `github`
 
 - To read remote repository url
 
