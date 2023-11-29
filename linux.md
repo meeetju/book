@@ -969,11 +969,8 @@ see this lol
 
 ## Usefull applications
 
----
-###
-apt-get
-###
----
+### apt-get
+
 
 `apt-get` is a command line tool for interacting with the Advanced Package Tool (APT) library (a package management system for Linux distributions). It allows you to search for, install, manage, update, and remove software
 
@@ -997,6 +994,13 @@ To remove package with all config files
 ```console
 apt-get purge [package_name]
 ```
+
+## Useful packages
+
+In order to avoid future problems install
+
+    sudo apt-get install pkg-config libssl-dev
+
 
 ## Instalation guidelines
 

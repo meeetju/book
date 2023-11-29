@@ -56,6 +56,8 @@ Install
 
     cargo install cargo-tarpaulin
 
+If there is an OpenSSL error look at [linux packages](linux.md#useful-packages)
+
 Run
 
     cargo tarpaulin --ignore-tests
