@@ -23,7 +23,10 @@ Change shell to `zsh`
 ```console
 chsh -s $(which zsh)
 ```
-- For the change to take effect, must logout
+- For the change to take effect, must logout. Alternatively also edit `~/.bashrc` by adding:
+
+        exec zsh
+
 - During first run, select `(2)` when prompted
 
 `zsh` configuration files consist of:
@@ -33,6 +36,16 @@ chsh -s $(which zsh)
     - note that there is also `/etc/zsh/zprofile` or `/etc/zprofile` file
 - `.zshrc` - is sourced in interactive shells, contains configurations and commands: aliases, key bindings, variables, functions
     - note that there is also `/etc/zsh/zshrc` or `/etc/zshrc` file
+
+#### ohmyzsh
+
+Install
+
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+Set theme in `~/.zshrc`
+
+    ZSH_THEME=af-magic
 
 ---
 ####
@@ -90,9 +103,6 @@ We can also link another config file from other files
 - Modify the file at the bottom
 
         <user> ALL=(ALL) ALL
-
-    Or depending on how the `root` is defined
-
         <user> ALL=(ALL:ALL) ALL
 
 ## Navigation
@@ -310,6 +320,12 @@ Find entires in files in /etc/passwd that consist a phrase which starts with `r`
 grep 'r.*t' /etc/passwd
 ```
 
+Find strings excluding the ones containing some pattern
+
+```
+grep -v 'some-pattern'
+```
+
 Find in Downloads directory all files with .deb extension
 ```
 find Downloads -name '*.deb' 
@@ -521,26 +537,33 @@ ps
 
 Read data of a specific PID
 ```
-ps wu PID
+ps wu <PID_NR>
 ```
 
 Kill PID
 ```
-kill PID
+kill <PID_NR>
 ```
 
 Stop and restore PID
 ```
-kill -STOP PID
-kill -CONT PID
+kill -STOP <PID_NR>
+kill -CONT <PID_NR>
 ```
 
 Ctrl + C
 ```
-kill -INT PID
+kill -INT <PID_NR>
 ```
 
 Ctrl + Z freezes the process, to run again we use "fg" or "bg"
+
+Read the process using blocking the specific port
+
+    lsof -ti tcp:<PORT_NR>
+
+
+
 
 ---
 ### Permissions
@@ -1019,6 +1042,10 @@ In order to avoid future problems install
 - Make Windows default on ubuntu boot GRUB
 
         sudo grep menuentry /boot/grub/grub.cf
+
+    or:
+
+        sudo fgrep menuentry /boot/grub/grub.cf
 
     Save the: 
     
