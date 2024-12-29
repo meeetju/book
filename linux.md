@@ -1033,7 +1033,13 @@ In order to avoid future problems install
 
 > Note: Use the terminal approach so that the `code` is added automatically to path
 
-## Linux alongside Windows
+### Display link
+
+Download: https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu
+
+Follow: https://support.displaylink.com/knowledgebase/articles/1944022-how-to-install-displaylink-software-on-ubuntu-20-0
+
+### Linux alongside Windows
 
 - Installation
 
