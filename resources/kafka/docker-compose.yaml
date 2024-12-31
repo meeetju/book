@@ -1,22 +1,83 @@
-version: "3.7"
+version: '3'
+
 services:
-  kafka:
-    image: landoop/fast-data-dev:latest
-    container_name: kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
     ports:
-      - 3181:3181
-      - 3040:3040
-      - 7082:7082
-      - 7083:7083
+      - 22181:2181
+
+  kafka_1:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
       - 9092:9092
     environment:
-      ADV_HOST: 127.0.0.1
-      RUNTESTS: 0
-      SAMPLEDATA: 0
-      BROKER_PORT: 9092
-      REST_PORT: 7082
-      CONNECT_PORT: 7083
-      ZK_PORT: 3181
-      WEB_PORT: 3040
-      REGISTRY_PORT: 8081
-    restart: always
+      KAFKA_BROKER_ID: 0
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka_1:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafka_init:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - kafka_1
+    entrypoint: ['/bin/sh', '-c']
+    command: |
+      "
+      echo -e 'Wait until kafka_1 is reachale'
+      kafka-topics --bootstrap-server kafka_1:29092
+
+      echo -e 'Create kafka topic "cities"'
+      kafka-topics --bootstrap-server kafka_1:29092 --create --if-not-exists --topic cities --replication-factor 1 partitions 1
+
+      echo -e 'Successfully created the topics:'
+      kafka-topics --bootstrap-server kafka_1:29092 --list
+      "
+
+  # kafka_2:
+  #   image: confluentinc/cp-kafka:latest
+  #   depends_on:
+  #     - zookeeper
+  #   ports:
+  #     - 29093:9093
+  #   environment:
+  #     KAFKA_BROKER_ID: 2
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka_2:9093,PLAINTEXT_HOST://localhost:29093
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  # kafka_3:
+  #   image: confluentinc/cp-kafka:latest
+  #   depends_on:
+  #     - zookeeper
+  #   ports:
+  #     - 29094:9094
+  #   environment:
+  #     KAFKA_BROKER_ID: 3
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka_3:9094,PLAINTEXT_HOST://localhost:29094
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    depends_on:
+      - zookeeper
+      - kafka_1
+      # - kafka_2
+      # - kafka_3
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka_1:29092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
