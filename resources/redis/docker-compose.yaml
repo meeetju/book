@@ -1,0 +1,21 @@
+services:
+  redis-stack:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    volumes:
+      - ./data:/data
+    environment:
+      - REDIS_ARGS=--maxmemory 100mb --maxmemory-policy allkeys-lru --requirepass redisPassword
+      - REDISDBNAME=RedisCourse
+      - REDIS_PASSWORD=redisPassword
+    command: [ "/entrypoint.sh", "./redis-stack.conf", "--loglevel debug", "--loadmodule", "/opt/redis-stack/lib/rejson.so"]
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+    networks:
+      - redis-network
+
+networks:
+  redis-network:
+    driver: bridge
