@@ -1,0 +1,25 @@
+ [mysqld]
+ log_warnings=10
+ binlog_format=ROW
+ gtid-domain-id=10001
+ server-id=10001
+ gtid_strict_mode=ON
+ log-bin=mysqld-bin
+ max_connections=4096
+ 
+ # Optimized for raw speed (added settings)
+ innodb_flush_log_at_trx_commit=0
+ innodb-doublewrite=0
+ innodb-checksum-algorithm=crc32
+ innodb-flush-method=O_DIRECT_NO_FSYNC
+ innodb-log-file-size=512M
+ innodb-log-buffer-size=64M
+ innodb-adaptive-hash-index=0
+ skip-log-bin
+ query-cache-type=0
+ query-cache-size=0
+ performance-schema=0
+ 
+ # Optional: Temporary table tuning
+ tmp-table-size=256M
+ max-heap-table-size=256M
