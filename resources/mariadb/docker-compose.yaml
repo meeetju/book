@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  db:
+     image: "mariadb:10.3.16"
+     container_name: "mariadb-server"
+     ports:
+       - "3306:3306"
+     volumes:
+       - mariadb_data:/var/lib/mysql
+       - ./docker/db/logs:/db-logs
+       - ./custom_settings.cnf:/etc/mysql/conf.d/custom_settings.cnf:ro
+     tmpfs:
+       - /var/lib/mysql:uid=999,gid=999
+     environment:
+       - UMASK=0777
+       - UMASK_DIR=0777
+       - MYSQL_HOST=db
+       - MYSQL_ROOT_PASSWORD=1234
+       - MYSQL_DATABASE=my_test
+       - MYSQL_USER=user
+       - MYSQL_PASSWORD=1234
+     ulimits:
+       nofile:
+         soft: 65535
+         hard: 65535
+
+volumes:
+  mariadb_data:
+
+# In case of 3306 port errors
+# sudo lsof -i :3306 
+# mysqld  1133 mysql   26u  IPv4   9852      0t0  TCP localhost:mysql (LISTEN)
+# sudo systemctl stop mysql 
