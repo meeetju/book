@@ -562,8 +562,13 @@ Read the process using blocking the specific port
 
     lsof -ti tcp:<PORT_NR>
 
+    or
 
+    sudo lsof -i :<PORT_NR>
 
+Stopping the servide blocking the port
+
+    sudo systemctl stop <USER>
 
 ---
 ### Permissions

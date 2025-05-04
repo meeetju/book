@@ -1,5 +1,9 @@
 # Working on Rust project cheat sheet
 
+## Initialise a new project within an existing folder
+
+        cargo init
+
 ## Faster linking
 
 ### Linux
