@@ -1032,6 +1032,22 @@ In order to avoid future problems install
 
 ## Instalation guidelines
 
+### Instaling from .deb files
+
+#### dpkg
+
+Run instalation with:
+
+    sudo dpkg -i package.deb
+
+If dependencies are missing, fix them with:
+
+    sudo apt-get install -f
+
+#### apt
+
+    sudo apt install ./package.deb
+
 ### VSCode
 
 [Docs](https://code.visualstudio.com/docs/setup/linux)
