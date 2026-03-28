@@ -22,33 +22,45 @@ Redis may have many modules:
 
 ## Redis CLI
 
-### Instalation and check
+### Installation and check
 
 Install redis
 
-    sudo apt-get install redis-server
+```bash
+sudo apt-get install redis-server
+```
 
 Check if CLI functions
 
-    redis-cli ping
+```bash
+redis-cli ping
+```
 
 To stop redis if we get port error when staring an instance in the container 
 
-    sudo systemctl stop redis-server
+```bash
+sudo systemctl stop redis-server
+```
 
 ### Log in
 
-    redis-cli -p 6379 -a redisPassword
+```bash
+redis-cli -p 6379 -a redisPassword
+```
 
 ### Flush the redis data
 
-    redis-cli -p 6379 -a redisPassword flushall
+```bash
+redis-cli -p 6379 -a redisPassword flushall
+```
 
 ### Displaying the redis info
 
 From within `127.0.0.1:6379` run:
 
-    info
+```bash
+info
+```
 
 ### PubSub
 
@@ -60,7 +72,7 @@ It is a fire and forget messaging system. There is no persistence of messages. T
 
 This is only a communication channel. So redis is just routing the messages where they need to go.
 
-Publisher does not know who subscribers are. Subscribers though may subscribe to channes using some pattern. Like `Channel*` which will match `Channel1` and `Channel2`.
+Publisher does not know who subscribers are. Subscribers though may subscribe to channels using some pattern. Like `Channel*` which will match `Channel1` and `Channel2`.
 
 ### Streaming
 
@@ -68,7 +80,7 @@ Streams are appended to infinitely. Typical use case is publishing log data. Wit
 
 Consumers may query for ranges of data form the streams (much like Kafka Consumer Groups) - XRANGE.
 
-Consumers may listen only for new itmes - XREAD (so just like PubSub).
+Consumers may listen only for new items - XREAD (so just like PubSub).
 
 Examples:
 - StreamOrders.py
@@ -76,7 +88,7 @@ Examples:
 
 ### RedisJSON
 
-A horizontally scalable NoSQL document store. Allows atomic updating of individual fields, otherwise we would have to deal with the intire value string.
+A horizontally scalable NoSQL document store. Allows atomic updating of individual fields, otherwise we would have to deal with the entire value string.
 
 ### Redis OM
 
