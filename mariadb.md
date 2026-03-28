@@ -2,7 +2,7 @@
 
 ## References
 
-[MadiaDB](https://mariadb.com/)
+[MariaDB](https://mariadb.com/)
 
 [Sample databases](https://dev.mysql.com/doc/index-other.html)
 
@@ -10,7 +10,7 @@
 
 ## General
 
-Relational database management system which has resemblence to MySQL.
+Relational database management system which has resemblance to MySQL.
 
 - Relational database is when two or more tables are related.
 - `RDBMS` is a Relational Database Management System
@@ -43,25 +43,25 @@ Also there are some other types at the [Bottom](https://mariadb.com/kb/en/data-t
 
 ### List all databases
 
-```
+```sql
 SHOW DATABASES;
 ```
 
 ### Use the database
 
-```
+```sql
 USE my_test;
 ```
 
 ### List all tables in a database
 
-```
+```sql
 SHOW TABLES;
 ```
 
 ### Create Database
 
-```
+```sql
 CREATE DATABASE IF NOT EXISTS my_test;
 ```
 
@@ -69,13 +69,13 @@ CREATE DATABASE IF NOT EXISTS my_test;
 
 - First remove the table in case it exists
 
-  ```
+  ```sql
   DROP TABLE IF EXISTS Fruits;
   ```
 
 - Create a table
 
-  ```
+  ```sql
   CREATE TABLE IF NOT EXISTS Fruits (
     ID INT NOT NULL AUTO_INCREMENT,
     Name VARCHAR(30) NOT NULL,
@@ -88,14 +88,14 @@ CREATE DATABASE IF NOT EXISTS my_test;
 
 Command definition:
 
-  ```
+  ```sql
   INSERT INTO <table_name> (column1, column2, ...)
   VALUES (value1, value2, ...)
   ```
 
 Example:
 
-  ```
+  ```sql
   INSERT INTO Fruits (Name, DateCreated)
   VALUES ('Apples', '2001-01-01');
 
@@ -108,18 +108,18 @@ Example:
 
 Command definition
 
-  ```
+  ```sql
   SELECT column1, column2, ...
   FROM <table_name>;
   ```
 
 Examples:
 
-  ```
+  ```sql
   SELECT * FROM Fruits;
   ```
 
-  ```
+  ```sql
   SELECT ID, Name FROM Fruits WHERE DateCreated > "2000-05-05 16:32:20" LIMIT 2;
   ```
 
@@ -127,7 +127,7 @@ Examples:
 
 Command definition:
 
-  ```
+  ```sql
   UPDATE <table_name>
   SET column1 = value1, column2 = value2, ...
   WHERE condition;
@@ -138,7 +138,7 @@ Command definition:
 
 Examples:
 
-  ```
+  ```sql
   UPDATE Fruits
   SET Name = 'Mangoes'
   WHERE ID = 2;
@@ -150,13 +150,13 @@ Examples:
 
 Command definition:
 
-  ```
+  ```sql
   DELETE FROM <table_name> WHERE condition;
   ```
 
 Example:
 
-  ```
+  ```sql
   DELETE FROM Fruits WHERE Name = 'Bananas';
   ```
 
@@ -166,7 +166,7 @@ Deleting the data inside a table, but not the table itself.
 
 Command definition:
 
-  ```
+  ```sql
   TRUNCATE TABLE <table_name>;
   ```
 
@@ -176,7 +176,7 @@ Removes the table completely.
 
 Command definition:
 
-  ```
+  ```sql
   DROP TABLE <table_name>;
   ```
 
@@ -186,7 +186,7 @@ Display only records that are unique.
 
 Command definition:
 
-  ```
+  ```sql
   SELECT DISTINCT column1, column2
   FROM <table_name>;
   ```
@@ -195,7 +195,7 @@ Example:
 
 Given we have a table which has inventory of films that have multiple copies, when we want to display only unique values:
 
-  ```
+  ```sql
   SELECT DISTINCT film_id FROM inventory; 
   ```
 
@@ -205,7 +205,7 @@ Query by default returns the data in the order how the data was entered into the
 
 Command definition:
 
-  ```
+  ```sql
   SELECT column1, column2, ...
   FROM 
   ORDER BY column1, ... ASC/DESC
@@ -215,7 +215,7 @@ Command definition:
 
 Example
 
-  ```
+  ```sql
   SELECT first_name, last_name
   FROM customer
   ORDER BY last_name DESC;
@@ -229,12 +229,12 @@ Command definitions:
 
 - column alias
 
-  ```
+  ```sql
   SELECT column_name AS alias_name_1 FROM table_1;
   ```
 - table alias
 
-  ```
+  ```sql
   SELECT column_name(s) FROM table_1 AS t1;
   ```
   
@@ -242,12 +242,12 @@ Command definitions:
 
 Examples:
 
-  ```
+  ```sql
   SELECT customer_id as ID, last_name AS lname FROM customer;
   ```
 ![alt text](/resources/mariadb/column_alias.png)
 
-  ```
+  ```sql
   SELECT c.customer_id, c.last_name FROM customer AS c;
   ```
 
@@ -261,14 +261,14 @@ Calculate the average value of a numeric column
 
 Command definition:
 
-  ```
+  ```sql
   SELECT AVG (column)
   FROM <table_name>;
   ```
 
 Example:
 
-  ```
+  ```sql
   SELECT AVG (replacement_cost)
   FROM film;
   ```
@@ -279,7 +279,7 @@ The `SELECT COUNT` function in SQL is used to count rows in a table or count non
 
 Command definition:
 
-  ```
+  ```sql
   SELECT COUNT (column) / (*)
   FROM <table_name>;
   ```
@@ -288,13 +288,13 @@ Command definition:
 
 Examples:
 
-  ```
+  ```sql
   SELECT COUNT(*) FROM employees;
   ```
 
   - Returns the total number of rows in the employees table.
 
-  ```
+  ```sql
   SELECT COUNT(email) FROM users;
   ```
 
@@ -306,14 +306,14 @@ Return maximum value in a set of values
 
 Command definition:
 
-  ```
+  ```sql
   SELECT MAX (column)
   FROM <table_name>;
   ```
 
 Example:
 
-  ```
+  ```sql
   SELECT MAX (replacement_cost)
   FROM film;
   ```
@@ -324,14 +324,14 @@ Return minimum value in a set of values
 
 Command definition:
 
-  ```
+  ```sql
   SELECT MIN (column)
   FROM <table_name>;
   ```
 
 Example:
 
-  ```
+  ```sql
   SELECT MIN (replacement_cost)
   FROM film;
   ```
@@ -342,14 +342,14 @@ Return a sum of values
 
 Command definition:
 
-  ```
+  ```sql
   SELECT SUM (column)
   FROM <table_name>;
   ```
 
 Example:
 
-  ```
+  ```sql
   SELECT SUM (rental_duration)
   FROM film;
   ```
@@ -366,7 +366,7 @@ The `GROUP BY` clause in SQL is used to group rows that have the same values in 
 
 Command definition:
 
-  ```
+  ```sql
   SELECT column_name(s)
   FROM table_name
   WHERE condition
@@ -378,7 +378,7 @@ Example:
 
 ![alt text](/resources/mariadb/group_by_source.png)
 
-  ```
+  ```sql
   SELECT department, COUNT(*) AS employee_count
   FROM employees
   GROUP BY department;
@@ -396,7 +396,7 @@ The `HAVING` clause in SQL is used to filter results after the `GROUP BY` operat
 
 Command definition:
 
-  ```
+  ```sql
   SELECT column_name(s)
   FROM table_name
   GROUP BY column_name(s)
@@ -408,7 +408,7 @@ Example:
 
 ![alt text](/resources/mariadb/having_source.png)
 
-  ```
+  ```sql
   SELECT department, COUNT(*) AS employee_count
   FROM employees
   GROUP BY department
@@ -425,7 +425,7 @@ A `JOIN` combines columns from two or more tables into a single set.
 
 Basic Join Syntax:
 
-  ```
+  ```sql
   SELECT column_name(s)
   FROM table1
   X JOIN table2 ON table1.column_name = table2.column_name;
@@ -446,7 +446,7 @@ Returns records that have matching values in both tables. So participating table
 
 Command definition:
 
-  ```
+  ```sql
   SELECT column_name(s)
   FROM table1
   INNER JOIN table2 ON table1.column_name = table2.column_name;
@@ -457,7 +457,7 @@ Given we have two tables which have a common column `customer_id`:
 
 ![alt text](/resources/mariadb/inner_join_source.png)
 
-  ```
+  ```sql
   SELECT customers.name, orders.product
   FROM customers
   INNER JOIN orders ON customers.id = orders.customer_id;
@@ -477,7 +477,7 @@ Join of every row of one table to every row of another table. This is also calle
 
 Command definition:
 
-  ```
+  ```sql
   SELECT *
   FROM table1
   CROSS JOIN table2;
@@ -490,7 +490,7 @@ Given we have two tables, `colors` has 3 records, `shapes` has 2 records
 
 ![alt text](/resources/mariadb/cross_join_source.png)
 
-  ```
+  ```sql
   SELECT colors.color, shapes.shape
   FROM colors
   CROSS JOIN shapes;
@@ -504,7 +504,7 @@ We get 6 records (3x2) of all colors for each shape.
 
 #### Left Join
 
-Return all records from the left table, and the matched records from the right table. Retrieves all rows from the left table, even if there is no matching row in the right table. If there's no match, NULL values are returned for the right table’s columns.
+Return all records from the left table, and the matched records from the right table. Retrieves all rows from the left table, even if there is no matching row in the right table. If there's no match, NULL values are returned for the right table's columns.
 
 - The query starts with all rows from the left table.
 
@@ -514,7 +514,7 @@ Return all records from the left table, and the matched records from the right t
 
 Command definition:
 
-  ```
+  ```sql
   SELECT column_name(s)
   FROM table1
   LEFT JOIN table2 ON table1.column_name = table2.column_name;
@@ -525,7 +525,7 @@ Given we have two tables which have matching `id` and `customer_id` columns
 
 ![alt text](/resources/mariadb/left_join_source.png)
 
-  ```
+  ```sql
   SELECT customers.name, orders.product
   FROM customers
   LEFT JOIN orders ON customers.id = orders.customer_id;
@@ -539,7 +539,7 @@ Result:
 
 #### Right Join
 
-Return all records from the right table, and the matched records from the left table. Retrieves all rows from the right table, even if there is no matching row in the left table. If there's no match, NULL values are returned for the left table’s columns.
+Return all records from the right table, and the matched records from the left table. Retrieves all rows from the right table, even if there is no matching row in the left table. If there's no match, NULL values are returned for the left table's columns.
 
 - Starts with all rows from the right table.
 
@@ -547,11 +547,11 @@ Return all records from the right table, and the matched records from the left t
 
 - If a match exists, the row is combined.
 
-- If no match exists, `NULL` values appear for the left table’s columns.
+- If no match exists, `NULL` values appear for the left table's columns.
 
 Command definition:
 
-  ```
+  ```sql
   SELECT column_name(s)
   FROM table1
   RIGHT JOIN table2 ON table1.column_name = table2.column_name;
@@ -563,7 +563,7 @@ Given we have two tables which have matching `id` and `customer_id` columns
 
 ![alt text](/resources/mariadb/right_join_source.png)
 
-  ```
+  ```sql
   SELECT customers.name, orders.product
   FROM customers
   RIGHT JOIN orders ON customers.id = orders.customer_id;
@@ -573,7 +573,7 @@ Result:
 
 ![alt text](/resources/mariadb/right_join_result.png)
 
-- The Tablet order remains, but since there’s no matching customer, NULL appears under the name column.
+- The Tablet order remains, but since there's no matching customer, NULL appears under the name column.
 
 ### Union operator
 
@@ -583,7 +583,7 @@ Union can be used with `DISTINCT` (this is default if omitted) and `ALL` keyword
 
 Command definition:
 
-  ```
+  ```sql
   SELECT column1, column2
   FROM table1
   UNION DISTINCT/ALL
@@ -595,7 +595,7 @@ Example:
 
 ![alt text](/resources/mariadb/union_source.png)
 
-  ```
+  ```sql
   SELECT name, city FROM customers
   UNION DISTINCT
   SELECT name, city FROM suppliers;
@@ -613,7 +613,7 @@ Used to combine the result-set of two or more SELECT statements into a single re
 
 Command definition:
 
-  ```
+  ```sql
   SELECT column1, column2
   FROM table1
   EXCEPT
@@ -625,7 +625,7 @@ Example:
 
 ![alt text](/resources/mariadb/union_source.png)
 
-  ```
+  ```sql
   SELECT name, city FROM customers
   EXCEPT
   SELECT name, city FROM suppliers;
@@ -647,7 +647,7 @@ Used to combine the result-set of two or more SELECT statements into a single re
 
 Command definition:
 
-  ```
+  ```sql
   SELECT column1, column2
   FROM table1
   INTERSECT
@@ -659,7 +659,7 @@ Example:
 
 ![alt text](/resources/mariadb/union_source.png)
 
-  ```
+  ```sql
   SELECT name, city FROM customers
   INTERSECT
   SELECT name, city FROM suppliers;

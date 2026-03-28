@@ -1,8 +1,10 @@
-# Working on Rust project cheat sheet
+# Rust Cheat Sheet
 
 ## Initialise a new project within an existing folder
 
-        cargo init
+```bash
+cargo init
+```
 
 ## Faster linking
 
@@ -10,120 +12,162 @@
 
 - Install linker
 
-        sudo apt-get install lld clang
+```bash
+sudo apt-get install lld clang
+```
 
-- Create a `.cargo/config.toml` file with 
+- Create a `.cargo/config.toml` file with
 
-        [target.x86_64-unknown-linux-gnu]
-        rustflags = ["-C", "linker=clang", "-C", "link-arg=-fuse-ld=lld"]
+```toml
+[target.x86_64-unknown-linux-gnu]
+rustflags = ["-C", "linker=clang", "-C", "link-arg=-fuse-ld=lld"]
+```
 
 ### MacOS
 
 - Install linker
 
-        brew install llvm
+```bash
+brew install llvm
+```
 
-    > follow steps in: `brew info llvm`
+> follow steps in: `brew info llvm`
 
-- Create a `.cargo/config.toml` file with 
+- Create a `.cargo/config.toml` file with
 
-        [target.x86_64-apple-darwin]
-        rustflags = ["-C", "link-arg=-fuse-ld=lld"]
-        [target.aarch64-apple-darwin]
-        rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.ll
+```toml
+[target.x86_64-apple-darwin]
+rustflags = ["-C", "link-arg=-fuse-ld=lld"]
+[target.aarch64-apple-darwin]
+rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld"]
+```
 
 ## Continuous check
 
 To avoid running the cargo check / cargo run.
 
-    cargo install cargo-watch
+```bash
+cargo install cargo-watch
+```
 
 To monitor source code to trigger commands every time a file changes
 
-    cargo watch -x check
+```bash
+cargo watch -x check
+```
 
 We can chain as well (ex. run tests if check succeeds)
 
-    cargo watch -x check -x test
+```bash
+cargo watch -x check -x test
+```
 
 ## Continuous integration
 
 ### Running tests
 
-    cargo test
+```bash
+cargo test
+```
 
 > Note it builds the project beforehand
 
 - With all the prints to the output
 
-        cargo test -- --nocapture
+```bash
+cargo test -- --nocapture
+```
 
 ### Code coverage
 
 - Install
 
-        cargo install cargo-tarpaulin
+```bash
+cargo install cargo-tarpaulin
+```
 
-    If there is an OpenSSL error look at [linux packages](linux.md#useful-packages)
+If there is an OpenSSL error look at [linux packages](linux.md#useful-packages)
 
 - Run
 
-        cargo tarpaulin --ignore-tests
+```bash
+cargo tarpaulin --ignore-tests
+```
 
 ### Linting
 
 - Install
 
-        rustup component add clippy
+```bash
+rustup component add clippy
+```
 
 - Run
 
-        cargo clippy
+```bash
+cargo clippy
+```
 
 - To fail when linter shows warnings, run
 
-        cargo clippy -- -D warnings
+```bash
+cargo clippy -- -D warnings
+```
 
 - To mute warnings on the code block add
 
-        #[allow(clippy::lint_name)]
+```rust
+#[allow(clippy::lint_name)]
+```
 
-- Linting may be done on the project level with 
+- Linting may be done on the project level with
 
-        #![allow(clippy::lint_name)]
+```rust
+#![allow(clippy::lint_name)]
+```
 
-    Or in `clippy.toml`
+Or in `clippy.toml`
 
 ### Formatting
 
 - Install
 
-        rustup component add rustfmt
+```bash
+rustup component add rustfmt
+```
 
 - Run
 
-        cargo fmt
+```bash
+cargo fmt
+```
 
-- To fail in pipeline where not formated code present
+- To fail in pipeline where not formatted code present
 
-        cargo fmt -- --check
+```bash
+cargo fmt -- --check
+```
 
 - To tune formatting for the project
 
-    We use the `rustfmt.toml`
+We use the `rustfmt.toml`
 
 ### Security Vulnerabilities
 
-We can check if vulnerabilities have been reported for any of the crates in the 
+We can check if vulnerabilities have been reported for any of the crates in the
 dependency tree of the project.
 
 - Install
 
-        cargo install cargo-audit
+```bash
+cargo install cargo-audit
+```
 
 - Run
 
-        cargo audit
+```bash
+cargo audit
+```
 
 ### Setup a pipeline
 
@@ -139,7 +183,7 @@ dependency tree of the project.
 
 [Example config](https://gist.github.com/LukeMathWalker/d98fa8d0fc5394b347adf734ef0e85ec)
 
-#### CirckleCi
+#### CircleCI
 
 [Quickstart](https://circleci.com/docs/getting-started/)
 
@@ -149,7 +193,7 @@ dependency tree of the project.
 
 To add dependencies like this:
 
-```
+```toml
 [dependencies]
 actix-web = "4"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
@@ -157,14 +201,14 @@ tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 
 we can use commands
 
-```
+```bash
 cargo add actix-web@4
 cargo add tokio@1 --features macros,rt-multi-thread
 ```
 
 To remove unused dependencies in the project
 
-```
+```bash
 cargo install cargo-udeps
 cargo +nightly udeps
 ```
@@ -179,11 +223,15 @@ Expands all macros in your code without passing the output to the compiler, allo
 
 - Install
 
-        cargo install cargo-expand
+```bash
+cargo install cargo-expand
+```
 
 - Run
 
-        cargo expand
+```bash
+cargo expand
+```
 
 ## Curl
 
@@ -191,23 +239,29 @@ Expands all macros in your code without passing the output to the compiler, allo
 
 - GET request
 
-        curl -v http://127.0.0.1:8000/health_check
+```bash
+curl -v http://127.0.0.1:8000/health_check
+```
 
 > -v gives more response details
 
 - POST request with `x-www-form-urlencoded` ver 1
 
-        curl -i --header "Content-Type: application/x-www-form-urlencoded" --request POST http://127.0.0.1:8000/subscriptions -d "name=van%20Buren&email=armin_van_buren%40gmail.com"
+```bash
+curl -i --header "Content-Type: application/x-www-form-urlencoded" --request POST http://127.0.0.1:8000/subscriptions -d "name=van%20Buren&email=armin_van_buren%40gmail.com"
+```
 
 - POST request with `x-www-form-urlencoded` ver 2
 
-        curl -i -X POST http://127.0.0.1:8000/subscriptions -d "name=van%20Buren&email=armin_van_buren%40gmail.com"
+```bash
+curl -i -X POST http://127.0.0.1:8000/subscriptions -d "name=van%20Buren&email=armin_van_buren%40gmail.com"
+```
 
 ## HTML forms
 
 ### application/x-www-form-urlencoded
 
-The keys and values [in our form] are encoded in key-value tuples separated by ‘&’, with a ‘=’ between
+The keys and values [in our form] are encoded in key-value tuples separated by '&', with a '=' between
 the key and the value. Non-alphanumeric characters in both keys and values are percent encoded.
 
 [HTML URL Encoding Reference](https://www.w3schools.com/tags/ref_urlencode.ASP)
@@ -230,16 +284,19 @@ If you want to implement a library to support serialisation for a new data forma
 
 Standard [log crate](https://docs.rs/log/latest/log/)
 
-Simple [env_logger crate](hhttps://docs.rs/env_logger/latest/env_logger/)
+Simple [env_logger crate](https://docs.rs/env_logger/latest/env_logger/)
 
 - To start logging add to main:
 
-        env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
+```rust
+env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
+```
 
 - Execute the application with one of LEVEL -> trace, debug, info, warn and error
 
-        RUST_LOG=<LEVEL> cargo run
-
+```bash
+RUST_LOG=<LEVEL> cargo run
+```
 
 actix_web provides middleware `actix_web::middleware::Logger`
 
@@ -247,44 +304,57 @@ actix_web provides middleware `actix_web::middleware::Logger`
 
 We can use `jq` for this.
 
-        sudo apt-get install jq
+```bash
+sudo apt-get install jq
+```
 
 Then we can run with the pipe
 
-        cargo run | jq
+```bash
+cargo run | jq
+```
 
 Manually
 
-        jq <<< {\"key\":\"value\"}
+```bash
+jq <<< {\"key\":\"value\"}
+```
 
+output:
 
-        output:
-
-        {
-          "key": "value"
-        }
+```json
+{
+  "key": "value"
+}
+```
 
 ## Formatting output with bunyan
 
 Install bunyan
 
-        cargo install bunyan
+```bash
+cargo install bunyan
+```
 
 Example command
 
-        TEST_LOG=true cargo test health_check_works | bunyan
+```bash
+TEST_LOG=true cargo test health_check_works | bunyan
+```
 
 ## Tracing
 
 Add tracing
 
-        cargo add tracing --features="log"
+```bash
+cargo add tracing --features="log"
+```
 
-Tracing has a nice `tracing::instrument` macro wich creates a wrapper around the function.
+Tracing has a nice `tracing::instrument` macro which creates a wrapper around the function.
 
 Example:
 
-```
+```rust
 #[tracing::instrument(
     name = "Adding a new subscriber",
     skip(form, db_connection_pool),
@@ -314,22 +384,27 @@ my_secret_string)` and outputs `Secret([REDACTED String])` instead of the actual
 
 Add secrecy
 
-        cargo add secrecy --features="serde"
+```bash
+cargo add secrecy --features="serde"
+```
 
 Example:
 
-        use secrecy::{ExposeSecret, Secret};
+```rust
+use secrecy::{ExposeSecret, Secret};
 
-        #[derive(serde::Deserialize)]
-        pub struct DatabaseSettings {
-        pub username: String,
-        pub password: Secret<String>,
-        pub port: u16,
-        pub host: String,
-        pub database_name: String,
-        }
+#[derive(serde::Deserialize)]
+pub struct DatabaseSettings {
+    pub username: String,
+    pub password: Secret<String>,
+    pub port: u16,
+    pub host: String,
+    pub database_name: String,
+}
+```
 
 Example to read:
 
-        &configuration.database.connection_string().expose_secret()
-
+```rust
+&configuration.database.connection_string().expose_secret()
+```

@@ -6,35 +6,43 @@
 
 It is also known as K8s.
 
-Orchestrator is responsible to control scaling the application(Adding more docker hosts/containers) and assurig connectivity. Proces of automatically deploing and managing containers is known as container orchestration.
+Orchestrator is responsible to control scaling the application(Adding more docker hosts/containers) and assuring connectivity. Proces of automatically deploying and managing containers is known as container orchestration.
 
 ## Kubectl
 
 The kube command line tool `kubectl` (kube control). It is used to deploy and manage applications on a Kubernetes cluster.
 
-- Delete everything on Kubernetes 
+- Delete everything on Kubernetes
 
-        kubectl delete all --all
+    ```bash
+    kubectl delete all --all
+    ```
 
 ## Yaml
 
 - To create a Pod based on the `.yml` use:
 
-        kubectl create -f <yaml_fie_name>
+    ```bash
+    kubectl create -f <yaml_fie_name>
+    ```
 
 - To apply changes in he config file to the running Pod
 
-        kubectl apply -f <yaml_file_name>
+    ```bash
+    kubectl apply -f <yaml_file_name>
+    ```
 
 - To generate a yaml file use
 
-        kubectl run <pod_name> --image=<image_name> --dry-run=client -o yaml
+    ```bash
+    kubectl run <pod_name> --image=<image_name> --dry-run=client -o yaml
+    ```
 
 ### Yaml general
 
 - Array example
 
-    ```
+    ```yaml
     Fruits:
     -   Banana
     -   Orange
@@ -42,7 +50,7 @@ The kube command line tool `kubectl` (kube control). It is used to deploy and ma
 
 - Dictionary example
 
-    ```
+    ```yaml
     Banana:
         Calories: 105
         Fat: 0.4g
@@ -52,7 +60,7 @@ The kube command line tool `kubectl` (kube control). It is used to deploy and ma
 
 - A list of dicts
 
-    ```
+    ```yaml
     Payslips:
       - Month: June
         Pay: 1000
@@ -62,9 +70,9 @@ The kube command line tool `kubectl` (kube control). It is used to deploy and ma
 
 ### Yaml in Kubernetes
 
-Every Kuberenetes yaml file consists of 4 top level fields
+Every Kubernetes yaml file consists of 4 top level fields
 
-```
+```yaml
 apiVersion: v1      # Kubernetes API version to create objects
 kind: Pod           # type of object we are trying to create
 metadata:           # data about the object
@@ -88,7 +96,7 @@ spec:
 
 ### Nodes(Minions)
 
-`Node` is a machine (virtual or phisical) on which Kubernetes is installed. It is a worker machine where containers will be launched by Kubernetes. This is a slave server.
+`Node` is a machine (virtual or physical) on which Kubernetes is installed. It is a worker machine where containers will be launched by Kubernetes. This is a slave server.
 
 Worker node consists of:
 - container runtime
@@ -96,11 +104,15 @@ Worker node consists of:
 
 - Display nodes
 
-        kubectl get nodes
+    ```bash
+    kubectl get nodes
+    ```
 
-- Display nodes with detalied data like OS
+- Display nodes with detailed data like OS
 
-        kubectl get nodes -o wide
+    ```bash
+    kubectl get nodes -o wide
+    ```
 
 ### Cluster
 
@@ -108,11 +120,13 @@ Worker node consists of:
 
 - Display cluster info
 
-        kubectl cluster-info
+    ```bash
+    kubectl cluster-info
+    ```
 
 ### Master
 
-`Master` is managing cluster. It has information of the members of the cluster. It monitors nodes. It moves the load from falied node to other loads. Master is also a node which has Kubernetes installed on it, but is configured as master. He is responsible of ochestration of the worker nodes. This is a master server.
+`Master` is managing cluster. It has information of the members of the cluster. It monitors nodes. It moves the load from failed node to other loads. Master is also a node which has Kubernetes installed on it, but is configured as master. He is responsible of orchestration of the worker nodes. This is a master server.
 
 Master consists of:
 - kube-apiserver
@@ -139,39 +153,53 @@ Pods usually have a 1 to 1 relationship with containers running your application
 - to scale up, we create new pods
 - to scale down, we delete existing
 
-A single `pod` can have multiple containers exept for the fact that they're usually not multiple contaners of the same kind. This is scenario where we have a helper container that might be doing some kind of supporting task for our application, like processing user entered data, processing a file. So when a new `pod` is created we know that teh application is created together with it's dependencies. The contaiers inside the `pod` can also communcate with each other directly by referring to each other as a `localhost` since they share the same network space. They can share the same storage space as well.
+A single `pod` can have multiple containers exept for the fact that they're usually not multiple containers of the same kind. This is scenario where we have a helper container that might be doing some kind of supporting task for our application, like processing user entered data, processing a file. So when a new `pod` is created we know that teh application is created together with it's dependencies. The containers inside the `pod` can also communicate with each other directly by referring to each other as a `localhost` since they share the same network space. They can share the same storage space as well.
 
 - Create a Pod
 
-        kubectl run <name> --image <image_name>
+    ```bash
+    kubectl run <name> --image <image_name>
+    ```
 
     Example:
 
-        kubectl run my_nginx --image nginx
+    ```bash
+    kubectl run my_nginx --image nginx
+    ```
 
-    > This command deploys a Docker cntainer by creating a `pod`. In order to do that, we may configure the Kubernetes to pull the image from the public Docker hub or from a private repository.
+    > This command deploys a Docker container by creating a `pod`. In order to do that, we may configure the Kubernetes to pull the image from the public Docker hub or from a private repository.
 
 - List Pods in cluster
 
-        kubectl get pods
+    ```bash
+    kubectl get pods
+    ```
 
 - List Pods with detailed data like IPs ad PORTs where they are running
 
-        kubectl get pods -o wide
+    ```bash
+    kubectl get pods -o wide
+    ```
 
 - Display more information related to the `pod`
 
-        kubectl describe pod <name>
+    ```bash
+    kubectl describe pod <name>
+    ```
 
 - Delete Pod
 
-        kubectl delete pod <name>
+    ```bash
+    kubectl delete pod <name>
+    ```
 
 - Edit Pod configuration
 
-        kubectl edit pod <name>
+    ```bash
+    kubectl edit pod <name>
+    ```
 
-## Kubernetes controlers
+## Kubernetes controllers
 
 The Kubernetes controllers are the brain of Kubernetes. They are processes that monitor Kubernetes objects and respond accordingly.
 
@@ -181,7 +209,7 @@ The Kubernetes controllers are the brain of Kubernetes. They are processes that 
 
 `Replication controller` helps us to run multiple instances of a single Pod in the Kubernetes cluster thus providing high availability.
 
-Even if we have a sigle `Pod`, the `replication controler` helps us by automatically bringing up a new Pod when the existing one fails. Thus, the `replication controller` ensures that the specified number of `Pods` are running at all times.
+Even if we have a single `Pod`, the `replication controller` helps us by automatically bringing up a new Pod when the existing one fails. Thus, the `replication controller` ensures that the specified number of `Pods` are running at all times.
 
 Another job is to create mutliple `Pods` to share the load accross them.
 
@@ -189,33 +217,39 @@ Another job is to create mutliple `Pods` to share the load accross them.
 
 - definition
 
-        apiVersion: v1
-        kind: ReplicationController
+    ```yaml
+    apiVersion: v1
+    kind: ReplicationController
+    metadata:
+      name: myapp-rc
+      labels:
+        name: myapp
+        type: front-end
+    spec:                # spec for replication controller
+      replicas: 3        # how many replicas from template
+      template:          # same content as for a Pod spec
         metadata:
-          name: myapp-rc
+          name: myapp-pod
           labels:
-            name: myapp
+            app: myapp
             type: front-end
-        spec:                # spec for replication controller
-          replicas: 3        # how many replicas from template
-          template:          # same content as for a Pod spec
-            metadata:
-              name: myapp-pod
-              labels:
-                app: myapp
-                type: front-end
-            spec:
-              containers:
-                - name: nginx-container
-                  image: nginx
+        spec:
+          containers:
+            - name: nginx-container
+              image: nginx
+    ```
 
 - Run the replication controller
 
-        kubectl create -f <replication_controler_yml>
+    ```bash
+    kubectl create -f <replication_controller_yml>
+    ```
 
 - List the replication controllers
 
-        kubectl get replicationcontroller
+    ```bash
+    kubectl get replicationcontroller
+    ```
 
 ### Replica set
 
@@ -223,68 +257,86 @@ Another job is to create mutliple `Pods` to share the load accross them.
 
 - definition
 
-        apiVersion: apps/v1
-        kind: ReplicaSet
+    ```yaml
+    apiVersion: apps/v1
+    kind: ReplicaSet
+    metadata:
+      name: myapp-replicaset
+      labels:
+        app: myapp
+        type: front-end
+    spec:                # spec for replica set
+      replicas: 3        # how many replicas from template
+      template:          # same content as for a Pod spec
         metadata:
-          name: myapp-replicaset
+          name: myapp-pod
           labels:
             app: myapp
             type: front-end
-        spec:                # spec for replica set
-          replicas: 3        # how many replicas from template
-          template:          # same content as for a Pod spec
-            metadata:
-              name: myapp-pod
-              labels:
-                app: myapp
-                type: front-end
-            spec:
-              containers:
-                - name: nginx-container
-                  image: nginx
-          selector:           # what Pods fall under it, not only from template
-            matchLabels:
-              type: front-end    
+        spec:
+          containers:
+            - name: nginx-container
+              image: nginx
+      selector:           # what Pods fall under it, not only from template
+        matchLabels:
+          type: front-end
+    ```
 
 - To create a replica set
 
-        kubectl create -f <replica_set_yml>
+    ```bash
+    kubectl create -f <replica_set_yml>
+    ```
 
 > Note, replicaset creates pods
 
 - List created replicas
 
-        kubectl get replicaset
+    ```bash
+    kubectl get replicaset
+    ```
 
 - To apply changes in replica set configuration
 
-        kubectl replace -f <replica_set_yml>
+    ```bash
+    kubectl replace -f <replica_set_yml>
+    ```
 
 - To scale the number of Pods without updating the file
 
-        kubectl scale --replicas=<number> -f <replica_set_yml>
+    ```bash
+    kubectl scale --replicas=<number> -f <replica_set_yml>
+    ```
 
-        or
+    or
 
-        kubectl scale replicaset <name_of_replicaset> --replicas=<number>
+    ```bash
+    kubectl scale replicaset <name_of_replicaset> --replicas=<number>
+    ```
 
 - Delete replica set and all underlying Pods
 
-         delete replicaset <name_of_replicaset>
+    ```bash
+    delete replicaset <name_of_replicaset>
+    ```
 
 - Display more info on replicaset
 
-        kubectl describe replicaset <name_of_replicaset>
+    ```bash
+    kubectl describe replicaset <name_of_replicaset>
+    ```
 
 - Edit the replica set
-        
-        kubectl edit replicaset <name_of_replicaset>
+
+    ```bash
+    kubectl edit replicaset <name_of_replicaset>
+    ```
 
 > Note that saving the file immediately applies the changes.
 
 ## Deployments
 
-For example we may want to have a web server that needs to be deployes in a production enviroment.
+For example we may want to have a web server that needs to be deployes in a production environment.
 We want many instances of the server. We also want whenever newer versions of application
 builds become available on the docker registry, we would like to upgrade docker instances seamlessly
 and one after another so that the users see no interruptions - `rolling updates`.
@@ -293,8 +345,8 @@ We want also that the changes may be rolled back. Etc.
 [Kubernetes deployments docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 
 - definition
-  
-```
+
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -324,33 +376,47 @@ spec:
 
 - Create deployment with file
 
-        kubectl create -f <deployment_definition_yaml>
+    ```bash
+    kubectl create -f <deployment_definition_yaml>
+    ```
 
 - Create deployment (example)
 
-        kubectl create deployment httpd-frontend --image=httpd:2.4-alpine --replicas=3
+    ```bash
+    kubectl create deployment httpd-frontend --image=httpd:2.4-alpine --replicas=3
+    ```
 
 - Get deployments
 
-        kubectl get deployments
-        
+    ```bash
+    kubectl get deployments
+    ```
+
 - Get more data about deployment
 
-        kubectl describe deployment <deployment_name>
+    ```bash
+    kubectl describe deployment <deployment_name>
+    ```
 
 - Edit deployment
 
-        kubectl edit deployment/<deployment_name>
+    ```bash
+    kubectl edit deployment/<deployment_name>
+    ```
 
 - Edits may be performed with `set`, example:
 
-        kubectl set image deployment <deployment_name> <container_name>=<image:version>
+    ```bash
+    kubectl set image deployment <deployment_name> <container_name>=<image:version>
+    ```
 
 > Deployment creates a replicaset automatically and replicaset creates pods.
 
 - Display all kubectl objects
 
-        kubectl get all
+    ```bash
+    kubectl get all
+    ```
 
 ### Rollout and Versioning
 
@@ -358,15 +424,21 @@ When you first create a deployment, it triggers a rollout, a new rollout creates
 
 - Display rollout status
 
-        kubectl rollout status deployment/<deployment_name>
+    ```bash
+    kubectl rollout status deployment/<deployment_name>
+    ```
 
 - Display rollout history
 
-        kubectl rollout history deployment/<deployment_name>
+    ```bash
+    kubectl rollout history deployment/<deployment_name>
+    ```
 
 - Update the deployment
 
-        kubectl apply -f <deployment_definition_yaml>
+    ```bash
+    kubectl apply -f <deployment_definition_yaml>
+    ```
 
 Deployments may have two strategies:
 
@@ -378,13 +450,15 @@ Deployments may have two strategies:
 
 - To rollback use
 
-        kubectl rollout undo deployment/<deployment_name>
+    ```bash
+    kubectl rollout undo deployment/<deployment_name>
+    ```
 
 ## Networking
 
 Each `Node` has an IP address. Unlike to the `Docker` world, where an IP address is assigned to a container, in `Kubernetes` world, an IP address is assigned to a `Pod`.
 
-When Kubernetes is initially configured, we create an internal private network with the address 10.244.0.0 and all the Pods are attahced to it. Every Pod gets its own address. The addresses may change when the Pods are recreated.
+When Kubernetes is initially configured, we create an internal private network with the address 10.244.0.0 and all the Pods are attached to it. Every Pod gets its own address. The addresses may change when the Pods are recreated.
 
 Kubernetes expects us to configure the internal addresses. We need to follow the rules:
 
@@ -417,44 +491,55 @@ on the node and forward requests on that port to a port on the Pod running the w
 
 - definition example
 
-        apiVersion: v1
-        kind: Service
-        metadata:
-          name: myapp-service
-        spec:
-          type: NodePort
-          ports:
-            - targetPort: 80   # Port of the application in Pod, if not provided it defaults to the same value as `port`
-              port: 80         # Port of the Service object here NodePort
-              nodePort: 30080  # The port of the node
-          selector:            # Labels identify the Pod to which the service port maps to
-            app: myapp
-            type: frontend
-
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: myapp-service
+    spec:
+      type: NodePort
+      ports:
+        - targetPort: 80   # Port of the application in Pod, if not provided it defaults to the same value as `port`
+          port: 80         # Port of the Service object here NodePort
+          nodePort: 30080  # The port of the node
+      selector:            # Labels identify the Pod to which the service port maps to
+        app: myapp
+        type: frontend
+    ```
 
 - Create service using a file
 
-        kubectl create -f <service_file_yaml>
+    ```bash
+    kubectl create -f <service_file_yaml>
+    ```
 
 - List services
 
-        kubectl get services
+    ```bash
+    kubectl get services
+    ```
 
-or
+    or
 
-        kubectl get svc
+    ```bash
+    kubectl get svc
+    ```
 
 > Note we can use combinations like `kubectl get pods,svc`
 
 - Display more data about the service
 
-        kubectl describe service <service_name>
+    ```bash
+    kubectl describe service <service_name>
+    ```
 
 > It will also list the cluster IP and the mapped ports.
 
 - If we use the minikube, in order to show the url (http://node_ip:port)to our app
 
-        minikube service <nodeport_service_name> --url
+    ```bash
+    minikube service <nodeport_service_name> --url
+    ```
 
 > Note in our case the `nodeport_service_name` would be `myapp-service`
 
@@ -463,27 +548,31 @@ or
 Creates a virtual IP inside the cluster to enable communication
 between different services. Like different groups of Pods with frontend, backend and redis. They all have to communicate to eachother.
 Every Pod has an IP address asigned, but this IPs are not static.
-This is becuase some Pods may go down, and new may be created.
+This is because some Pods may go down, and new may be created.
 So the Cluster IP service creates a single entrypoint for each group. So if one of frontend Pods wants to communicate with the backend, the Cluser IP service picks one of the backend Pods randomly. This enables to us to easily deploy a microservices based application on Kubernetes cluster.
 
 - definition example
 
-        apiVersion: v1
-        kind: Service
-        metadata:
-          name: backend
-        spec:
-          type: ClusterIP      # Note this is a default type of service
-          ports:
-            - targetPort: 80   # Port where backend is exposed
-              port: 80         # Port of the where service is exposed
-          selector:            # Labels identify the set of Pods
-            app: myapp
-            type: backend
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: backend
+    spec:
+      type: ClusterIP      # Note this is a default type of service
+      ports:
+        - targetPort: 80   # Port where backend is exposed
+          port: 80         # Port of the where service is exposed
+      selector:            # Labels identify the set of Pods
+        app: myapp
+        type: backend
+    ```
 
 - Create service using a file
 
-        kubectl create -f <service_file_yaml>
+    ```bash
+    kubectl create -f <service_file_yaml>
+    ```
 
 ### Load Balancer Service
 
@@ -509,7 +598,7 @@ voting-app -> redis <-worker-> db <- result-app
 
 #### voting-app (writes to redis)
 - listens on port 80
-- requires a NodePort `voting-app` service so that it is accesible from outside
+- requires a NodePort `voting-app` service so that it is accessible from outside
 #### redis
 - listens on port 6379
 - requires a ClusterIP service named `redis` so that other Pods may communicate
@@ -522,7 +611,7 @@ voting-app -> redis <-worker-> db <- result-app
 - requires `username` and `password`
 #### result-app
 - listens on port 80
-- requires a NodePort `result-app` service so that it is accesible from outside
+- requires a NodePort `result-app` service so that it is accessible from outside
 
 ### Project
 
